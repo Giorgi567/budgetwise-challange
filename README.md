@@ -1,4 +1,4 @@
-# Plaid Quickstart Workshop
+# BudgetWise Challange
 
 ## Local Development
 

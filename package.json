@@ -4,9 +4,6 @@
   "version": "1.0.0",
   "description": "Quick Start Workshop",
   "main": "index.js",
-  "engines": {
-    "node": "^12.20.1"
-  },
   "scripts": {
     "start": "nodemon index.js"
   },
