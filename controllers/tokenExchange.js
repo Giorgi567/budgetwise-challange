@@ -8,8 +8,9 @@ exports.tokenExchange = async (req, res, next) => {
     publicToken
   );
 
-  const start_date = "2023-10-01";
-  const end_date = "2023-11-01";
+  // These are hard-coded because in the test (sandbox) environment, you can only get transactions as old as 2 years, no more than that
+  const start_date = "2021-11-01";
+  const end_date = "2023-10-01";
 
   const authResponse = await plaidClient.getAuth(accessToken);
   const identityResponse = await plaidClient.getIdentity(accessToken);
@@ -19,63 +20,78 @@ exports.tokenExchange = async (req, res, next) => {
     start_date,
     end_date
   );
-  console.log(transactionResponse);
 
-  // Loop through the users in authResponse and handle their data separately
-  for (const user of authResponse.accounts) {
-    // Create a unique document reference for each user using their account_id
-    const userRef = User.doc(user.account_id);
+  const userRef = await User.doc(authResponse.accounts[0].account_id);
 
-    // Saves account balances into Firestore
-    const account = balanceResponse.accounts.find(
-      (account) => account.account_id === user.account_id
-    );
-    if (account) {
-      const accountBalances = {
-        account_id: account.account_id,
-        available: account.balances.available,
-        current: account.balances.current,
-        iso_currency_code: account.balances.iso_currency_code,
-      };
+  console.log(transactionResponse.accounts.length);
 
-      // Saves account balances to a subcollection 'accountBalances'
-      userRef.collection("accountBalances").add({
+  // Save identity data directly to the user's document
+  const identity = identityResponse.accounts.find(
+    (account) => account.account_id === authResponse.accounts[0].account_id
+  );
+  if (identity) {
+    userRef.set(
+      {
         timestamp: admin.firestore.FieldValue.serverTimestamp(),
-        balances: accountBalances,
-      });
-    }
-
-    // Saves identity data directly to the user's document
-    const identity = identityResponse.accounts.find(
-      (account) => account.account_id === user.account_id
+        account_id: identity.account_id,
+        name: identity.owners[0].names,
+        emails: identity.owners[0].emails,
+        accessToken: accessToken,
+      },
+      { merge: true }
     );
-    if (identity) {
-      // Set the identity data directly in the user's document
-      userRef.set(
-        {
-          timestamp: admin.firestore.FieldValue.serverTimestamp(),
-          account_id: identity.account_id,
-          name: identity.owners[0].names,
-          emails: identity.owners[0].emails,
-          accessToken: accessToken,
-        },
-        { merge: true } // This merge option ensures that new identity data is merged with existing data
-      );
-    }
+  }
 
-    // Example: Save transactions as a subcollection 'transactions' under the user's document
-    const userTransactions = transactionResponse.accounts.filter(
-      (transaction) => transaction.account_id === user.account_id
-    );
-    userTransactions.forEach((transaction) => {
-      userRef.collection("transactions").add({
-        timestamp: admin.firestore.FieldValue.serverTimestamp(),
-        data: transaction,
-      });
+  // Create a unique document reference with Firestore-generated ID for each user account
+  const userAccountRef = userRef
+    .collection("Accounts")
+    .doc(authResponse.accounts[0].account_id);
+
+  // Create subcollections for balance and transaction history
+  const checkingRef = userAccountRef.collection("Checking");
+  const savingRef = userAccountRef.collection("Saving");
+
+  // Save account balances into Firestore
+  const account = balanceResponse.accounts.find(
+    (account) => account.account_id === authResponse.accounts[0].account_id
+  );
+  if (account) {
+    checkingRef.add({
+      timestamp: admin.firestore.FieldValue.serverTimestamp(),
+      type: "Checking",
+      available: account.balances.available,
+      current: account.balances.current,
+      iso_currency_code: account.balances.iso_currency_code,
+    });
+
+    savingRef.add({
+      timestamp: admin.firestore.FieldValue.serverTimestamp(),
+      type: "Saving",
+      available: account.balances.available,
+      current: account.balances.current,
+      iso_currency_code: account.balances.iso_currency_code,
     });
   }
 
-  res.sendStatus(200);
+  console.log(authResponse.accounts[0].account_id, "IDDD");
+
+  // Save transactions as documents in the transaction history subcollection
+  const userTransactions = transactionResponse.transactions.filter(
+    (transaction) =>
+      transaction.account_id === authResponse.accounts[0].account_id
+  );
+  console.log(transactionResponse.transactions);
+  console.log("FINAL", userTransactions);
+
+  userTransactions.forEach((transaction) => {
+    const transactionRef = userAccountRef.collection("TransactionHistory");
+    transactionRef.add({
+      timestamp: admin.firestore.FieldValue.serverTimestamp(),
+      data: transaction,
+    });
+  });
+
+  return res.sendStatus(200);
 };
 
 exports.getAuthResponseFunction = async (req, res, next) => {
