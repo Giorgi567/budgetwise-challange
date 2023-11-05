@@ -5,6 +5,8 @@
 ```
 Start app and navigate to `localhost:3000`:
 Or whatever port your running on.
+Note: account: email: user_good password: user_good.
+yes bouth password and email are user_good
 ```
 
 $ npm install
