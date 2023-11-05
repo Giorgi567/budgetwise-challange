@@ -10,7 +10,7 @@ Start app and navigate to `localhost:3000`:
 $ npm install
 
 ```
-
+npm start
 ```
 
 CLIENT_ID = 'INSERT_CLIENT_ID'
