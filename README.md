@@ -19,9 +19,6 @@ SECRET = 'INSERT_SECRET'
 
 It's recommended to use your own Plaid credentials. The provided credentials may not always be available.
 
-```
-
-```
 
 
 
