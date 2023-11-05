@@ -22,8 +22,8 @@ exports.tokenExchange = async (req, res, next) => {
   );
 
   const userRef = await User.doc(authResponse.accounts[0].account_id);
-
-  console.log(transactionResponse.accounts.length);
+  console.log("ACCOUTNS", balanceResponse.accounts);
+  const [checkingAccount, savingsAccount] = balanceResponse.accounts;
 
   // Save identity data directly to the user's document
   const identity = identityResponse.accounts.find(
@@ -56,32 +56,16 @@ exports.tokenExchange = async (req, res, next) => {
     (account) => account.account_id === authResponse.accounts[0].account_id
   );
   if (account) {
-    checkingRef.add({
-      timestamp: admin.firestore.FieldValue.serverTimestamp(),
-      type: "Checking",
-      available: account.balances.available,
-      current: account.balances.current,
-      iso_currency_code: account.balances.iso_currency_code,
-    });
+    checkingRef.add(checkingAccount);
 
-    savingRef.add({
-      timestamp: admin.firestore.FieldValue.serverTimestamp(),
-      type: "Saving",
-      available: account.balances.available,
-      current: account.balances.current,
-      iso_currency_code: account.balances.iso_currency_code,
-    });
+    savingRef.add(savingsAccount);
   }
-
-  console.log(authResponse.accounts[0].account_id, "IDDD");
 
   // Save transactions as documents in the transaction history subcollection
   const userTransactions = transactionResponse.transactions.filter(
     (transaction) =>
       transaction.account_id === authResponse.accounts[0].account_id
   );
-  console.log(transactionResponse.transactions);
-  console.log("FINAL", userTransactions);
 
   userTransactions.forEach((transaction) => {
     const transactionRef = userAccountRef.collection("TransactionHistory");
