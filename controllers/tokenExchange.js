@@ -21,9 +21,8 @@ exports.tokenExchange = async (req, res, next) => {
     start_date,
     end_date
   );
-
+  // creating a reference to a  document
   const userRef = await User.doc(authResponse.accounts[0].account_id);
-  console.log("ACCOUNTS", balanceResponse.accounts);
 
   await saveIdentityData(userRef, authResponse, accessToken, identityResponse);
   await saveBalances(userRef, authResponse, balanceResponse);
@@ -31,50 +30,3 @@ exports.tokenExchange = async (req, res, next) => {
 
   return res.sendStatus(200);
 };
-
-// exports.getAuthResponseFunction = async (req, res, next) => {
-//   try {
-//     const { publicToken } = req.query; // Assuming publicToken is passed as a query parameter
-//     const { access_token: accessToken } = await plaidClient.exchangePublicToken(
-//       publicToken
-//     );
-//     const authResponse = await plaidClient.getAuth(accessToken);
-//     res.status(200).json(authResponse);
-//   } catch (error) {
-//     res
-//       .status(500)
-//       .json({ error: "An error occurred while fetching authResponse." });
-//   }
-// };
-
-// // Function to fetch identityResponse
-// exports.getIdentityResponseFunction = async (req, res, next) => {
-//   try {
-//     const { publicToken } = req.query; // Assuming publicToken is passed as a query parameter
-//     const { access_token: accessToken } = await plaidClient.exchangePublicToken(
-//       publicToken
-//     );
-//     const identityResponse = await plaidClient.getIdentity(accessToken);
-//     res.status(200).json(identityResponse);
-//   } catch (error) {
-//     res
-//       .status(500)
-//       .json({ error: "An error occurred while fetching identityResponse." });
-//   }
-// };
-
-// // Function to fetch balanceResponse
-// exports.getBalanceResponseFunction = async (req, res, next) => {
-//   try {
-//     const { publicToken } = req.query; // Assuming publicToken is passed as a query parameter
-//     const { access_token: accessToken } = await plaidClient.exchangePublicToken(
-//       publicToken
-//     );
-//     const balanceResponse = await plaidClient.getBalance(accessToken);
-//     res.status(200).json(balanceResponse);
-//   } catch (error) {
-//     res
-//       .status(500)
-//       .json({ error: "An error occurred while fetching balanceResponse." });
-//   }
-// };
