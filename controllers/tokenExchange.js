@@ -1,6 +1,8 @@
 const plaidClient = require("../helper/plaid.client.setup");
-const { admin, firestore } = require("../helper/firestore.initilizer"); // Adjust the path as needed
 const User = require("../modules/users.module");
+const saveBalances = require("../helper/save.balance");
+const saveIdentityData = require("../helper/save.identiy");
+const saveTransactions = require("../helper/save.transactions");
 
 exports.tokenExchange = async (req, res, next) => {
   const { publicToken } = req.body;
@@ -8,7 +10,6 @@ exports.tokenExchange = async (req, res, next) => {
     publicToken
   );
 
-  // These are hard-coded because in the test (sandbox) environment, you can only get transactions as old as 2 years, no more than that
   const start_date = "2021-11-01";
   const end_date = "2023-10-01";
 
@@ -22,58 +23,15 @@ exports.tokenExchange = async (req, res, next) => {
   );
 
   const userRef = await User.doc(authResponse.accounts[0].account_id);
-  console.log("ACCOUTNS", balanceResponse.accounts);
-  const [checkingAccount, savingsAccount] = balanceResponse.accounts;
+  console.log("ACCOUNTS", balanceResponse.accounts);
 
-  // Save identity data directly to the user's document
-  const identity = identityResponse.accounts.find(
-    (account) => account.account_id === authResponse.accounts[0].account_id
-  );
-  if (identity) {
-    userRef.set(
-      {
-        timestamp: admin.firestore.FieldValue.serverTimestamp(),
-        account_id: identity.account_id,
-        name: identity.owners[0].names,
-        emails: identity.owners[0].emails,
-        accessToken: accessToken,
-      },
-      { merge: true }
-    );
-  }
-
-  // Create a unique document reference with Firestore-generated ID for each user account
+  await saveIdentityData(userRef, authResponse, accessToken, identityResponse);
   const userAccountRef = userRef
     .collection("Accounts")
     .doc(authResponse.accounts[0].account_id);
 
-  // Create subcollections for balance and transaction history
-  const checkingRef = userAccountRef.collection("Checking");
-  const savingRef = userAccountRef.collection("Saving");
-
-  // Save account balances into Firestore
-  const account = balanceResponse.accounts.find(
-    (account) => account.account_id === authResponse.accounts[0].account_id
-  );
-  if (account) {
-    checkingRef.add(checkingAccount);
-
-    savingRef.add(savingsAccount);
-  }
-
-  // Save transactions as documents in the transaction history subcollection
-  const userTransactions = transactionResponse.transactions.filter(
-    (transaction) =>
-      transaction.account_id === authResponse.accounts[0].account_id
-  );
-
-  userTransactions.forEach((transaction) => {
-    const transactionRef = userAccountRef.collection("TransactionHistory");
-    transactionRef.add({
-      timestamp: admin.firestore.FieldValue.serverTimestamp(),
-      data: transaction,
-    });
-  });
+  await saveBalances(userAccountRef, authResponse, balanceResponse);
+  await saveTransactions(userAccountRef, authResponse, transactionResponse);
 
   return res.sendStatus(200);
 };
