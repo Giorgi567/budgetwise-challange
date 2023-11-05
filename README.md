@@ -3,20 +3,69 @@
 ## Local Development
 
 ```
-$ npm install
-```
-
-Create a `.env` in the root directory of this repo and add your client ID and secret found [here in Plaid's dashboard](https://dashboard.plaid.com/team/keys)
-
-```
-CLIENT_ID = 'INSERT_CLIENT_ID'
-SECRET = 'INSERT_SECRET'
-
-OR USE MINE IF GIT OR PLAID DID NOT DEACTIVATED THEM
-```
 
 Start app and navigate to `localhost:3000`:
 
+
+
 ```
+
+$ npm install
+
+```
+
+```
+
+CLIENT_ID = 'INSERT_CLIENT_ID'
+SECRET = 'INSERT_SECRET'
+
+It's recommended to use your own Plaid credentials. The provided credentials may not always be available.
+
+```
+
+```
+
 npm start
+
 ```
+
+```
+
+DATABASE DESIGN:
+
+**SIMPLE OVERVIEW:**
+
+1. User can have 2 or more accounts, so the hierarchy goes like this:
+
+   - User
+     - Accounts (Savings Account, Checking Account, etc...)
+       - Each of the accounts has its own balance.
+
+2. **transactionHistory** is not an account, so it's not listed in the hierarchy.
+
+**DETAILS:**
+
+- There are 2 Top-Level Collections:
+
+  1.  **transactionHistory:**
+
+      - This collection saves all the transactions.
+      - Each transaction document includes fields for `timestamp` and the `transaction` object.
+      - You can explore the transaction details by opening the `transaction` object.
+
+  2.  **Users:**
+      - The Users collection contains user documents.
+      - Each user document stores general user information, such as an array of emails (typically 3), including a primary email for account recovery, `account_id` from Plaid, `accessToken` from Plaid, and the user's name.
+
+  - Within the user document, there are 2 sub-collections:
+
+    1. **CheckingAccount:**
+
+       - This sub-collection holds checking account balance information.
+
+    2. **SavingAccount:**
+       - This sub-collection contains savings account balance details.
+
+- Everything within the database is assigned unique IDs.
+
+This structured database design allows for the effective management of user data, transaction history, and financial account balances. You can use this information to understand the data organization within the BudgetWise Challenge application.

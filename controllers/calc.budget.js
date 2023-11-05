@@ -52,7 +52,6 @@ exports.calcMonthlyBudget = async (req, res, next) => {
     const savings = [];
     const savingsQuery = User.doc(userId).collection("SavingAccount");
     const savingsSnapshot = await savingsQuery.get();
-    console.log("SAVINGS", savingsSnapshot);
 
     savingsSnapshot.forEach((doc) => {
       // Get data from each document
@@ -61,7 +60,6 @@ exports.calcMonthlyBudget = async (req, res, next) => {
       // Push matching transactions to the array after taking the absolute value of the amount
       savings.push(savingsData.balances.current);
     });
-    console.log("SAVINGS", savings);
 
     // Code to fetch Checking Account data
     const checking = [];
@@ -76,7 +74,6 @@ exports.calcMonthlyBudget = async (req, res, next) => {
       // Push matching transactions to the array after taking the absolute value of the amount
       checking.push(checkingData.balances.current);
     });
-    console.log("CHECKING", checking);
 
     // i hard coded [0] here because in savings/checking account a user only gonna have only 1 field where its go
     // LITLE WARNING: Monthly income in results may be 1$ lower becuz i used Math.celi()

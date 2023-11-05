@@ -1,20 +1,17 @@
+const CaputreError = require("../helper/CaptureError");
 const User = require("../modules/users.module");
-
 exports.getAccessKey = async (req, res, next) => {
   try {
-    console.log(req.params.userId);
-
+    //Create a reference to the User's document by the given userId.
     const userDocRef = User.doc(req.params.userId);
     userDocRef
-      .get()
+      .get() // gets documents snapshot
       .then((doc) => {
         if (doc.exists) {
-          const userData = doc.data();
-          console.log("User found:");
+          const userData = doc.data(); // gets data from documents snapshot
           res.status(200).json({ access_token: userData.accessToken });
         } else {
-          console.log("No such document!");
-          res.status(404).json({ message: "User not found" });
+          return next(new CaptureError("User not found", 404));
         }
       })
       .catch((error) => {

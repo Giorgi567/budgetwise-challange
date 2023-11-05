@@ -2,7 +2,7 @@
   "name": "budget_wise_challange",
   "author": "Giorgi Gvintidze",
   "version": "1.0.0",
-  "description": "Quick Start Workshop",
+  "description": "Budget Wise Back-End Developer Intern Challange",
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js"
@@ -12,7 +12,6 @@
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "dotenv": "^8.6.0",
-    "expres": "0.0.5",
     "express": "^4.18.2",
     "firebase-admin": "^11.11.0",
     "node": "^21.1.0",

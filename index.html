@@ -1,36 +1,51 @@
 <script src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
 <script>
-(async ($) => {
+  (async ($) => {
+    // Function to fetch the Link token from server
     const fetchLinkToken = async () => {
-        const response = await fetch('/create-link-token');
-        const { linkToken } = await response.json();
-        return linkToken;
+      const response = await fetch("/create-link-token");
+      const { linkToken } = await response.json();
+      return linkToken;
     };
 
+    // Initialize Plaid Link
     const handler = Plaid.create({
-        token: await fetchLinkToken(),
-        onSuccess: async (publicToken, metadata) => {
-            console.log(publicToken);
-            console.log(metadata);
-            await fetch('/token-exchange', {
-                method: 'POST',
-                body: JSON.stringify({ publicToken }),
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-        },
-         onEvent: (metadata) => {
-            console.log(metadata);
-        },
-        onExit: (error, metadata) => {
-            console.log(error, metadata);
-        },
+      // Provide the Link token obtained from your server
+      token: await fetchLinkToken(),
+
+      // Callback when a user successfully links their account
+      onSuccess: async (publicToken, metadata) => {
+        console.log(publicToken);
+        console.log(metadata);
+
+        // Send the public token to your server for token exchange
+        await fetch("/token-exchange", {
+          method: "POST",
+          body: JSON.stringify({ publicToken }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+      },
+
+      // Callback for Plaid Link events
+      onEvent: (metadata) => {
+        console.log(metadata);
+      },
+
+      // Callback when the user exits the Plaid Link flow
+      onExit: (error, metadata) => {
+        console.log(error, metadata);
+      },
     });
-    $('#plaid-button').on('click', function(e) { handler.open(); });
-})(jQuery);
+
+    // Attach a click event to the "Link your account with Plaid!" button
+    $("#plaid-button").on("click", function (e) {
+      handler.open();
+    });
+  })(jQuery);
 </script>
 
-<h1>Plaid Quick Start Workshop!</h1>
-<button id='plaid-button'>Link your account with Plaid!</button>
+<h1>Plaid Client Side!</h1>
+<button id="plaid-button">Link your account with Plaid!</button>

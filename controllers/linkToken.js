@@ -1,5 +1,7 @@
 const plaidClient = require("../helper/plaid.client.setup");
 
+// This function is pretty straightforward. It creates a link token
+// according to given property values.
 exports.createLinkToken = async (req, res, next) => {
   const { link_token: linkToken } = await plaidClient.createLinkToken({
     user: {

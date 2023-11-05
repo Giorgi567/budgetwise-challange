@@ -26,7 +26,7 @@ exports.tokenExchange = async (req, res, next) => {
 
   await saveIdentityData(userRef, authResponse, accessToken, identityResponse);
   await saveBalances(userRef, authResponse, balanceResponse);
-  await saveTransactions(userRef, authResponse, transactionResponse);
+  await saveTransactions(authResponse, transactionResponse);
 
   return res.sendStatus(200);
 };
