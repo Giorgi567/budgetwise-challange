@@ -29,7 +29,7 @@ app.get("/", async (req, res) => {
 app.use("/create-link-token", createLinkRoutes);
 app.use("/token-exchange", tokenExchangeRoutes);
 app.use("/getAccessKey", accesKeyRoutes);
-app.use("/user-account-balances", monthylBudgetRoutes);
+app.use("/usersMonthlyBudget", monthylBudgetRoutes);
 
 app.use(errorHandler);
 
