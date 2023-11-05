@@ -1,4 +1,3 @@
-const CaputreError = require("../helper/CaptureError");
 const User = require("../modules/users.module");
 exports.getAccessKey = async (req, res, next) => {
   try {
