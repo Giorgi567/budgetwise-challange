@@ -22,6 +22,7 @@ It's recommended to use your own Plaid credentials. The provided credentials may
 ```
 
 ```
+Note: Since there was no mention of security in this challenge, I did not allocate any significant time to address security concerns. If you have any reservations about my skills in security and data protection, I encourage you to explore my other projects, such as the eCommerce API, and many more.
 
 DATABASE DESIGN:
 
