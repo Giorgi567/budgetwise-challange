@@ -5,17 +5,8 @@ const admin = require("firebase-admin");
 exports.calcMonthlyBudget = async (req, res, next) => {
   const userId = req.params.userId;
   try {
-    // Reference to Firestore collection "TransactionHistory"
-    const transactionHistoryCollection = admin
-      .firestore()
-      .collection("transactionHistory");
-
     // Querys transactions where account_id matches userId
-    const query = transactionHistoryCollection.where(
-      "transaction.account_id",
-      "==",
-      userId
-    );
+    const query = Transactions.where("transaction.account_id", "==", userId);
 
     // gets snpashot of query
     const snapshot = await query.get();
@@ -28,7 +19,7 @@ exports.calcMonthlyBudget = async (req, res, next) => {
       const transactionData = doc.data();
 
       // Push matching transactions to the array after taking the absolute value of the amount
-      matchingTransactions.push(Math.abs(transactionData.transaction.amount));
+      matchingTransactions.push(transactionData.transaction.amount);
     });
 
     //this sums up all the the expenses
@@ -36,6 +27,8 @@ exports.calcMonthlyBudget = async (req, res, next) => {
       (acc, currentValue) => acc + currentValue,
       0
     );
+
+    ////////////////Code Below Gets Savings Balance ///////////////////////////
 
     res.status(200).json({
       total_transaction_expenses: totalTransactionExpense,

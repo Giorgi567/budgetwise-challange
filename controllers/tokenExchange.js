@@ -26,12 +26,8 @@ exports.tokenExchange = async (req, res, next) => {
   console.log("ACCOUNTS", balanceResponse.accounts);
 
   await saveIdentityData(userRef, authResponse, accessToken, identityResponse);
-  const userAccountRef = userRef
-    .collection("Accounts")
-    .doc(authResponse.accounts[0].account_id);
-
-  await saveBalances(userAccountRef, authResponse, balanceResponse);
-  await saveTransactions(userAccountRef, authResponse, transactionResponse);
+  await saveBalances(userRef, authResponse, balanceResponse);
+  await saveTransactions(userRef, authResponse, transactionResponse);
 
   return res.sendStatus(200);
 };
