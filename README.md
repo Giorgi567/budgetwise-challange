@@ -4,7 +4,7 @@
 
 ```
 Start app and navigate to `localhost:3000`:
-
+Or whatever port your running on.
 ```
 
 $ npm install
@@ -13,6 +13,7 @@ $ npm install
 npm start
 ```
 
+```
 CLIENT_ID = 'INSERT_CLIENT_ID'
 SECRET = 'INSERT_SECRET'
 
@@ -62,3 +63,4 @@ DATABASE DESIGN:
        - This sub-collection contains savings account balance details.
 
 - Everything within the database is assigned unique IDs.
+```
