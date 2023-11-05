@@ -23,9 +23,6 @@ It's recommended to use your own Plaid credentials. The provided credentials may
 
 ```
 
-
-
-
 DATABASE DESIGN:
 
 1. User can have 2 or more accounts, so the hierarchy goes like this:
