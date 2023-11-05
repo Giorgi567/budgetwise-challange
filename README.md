@@ -3,10 +3,7 @@
 ## Local Development
 
 ```
-
 Start app and navigate to `localhost:3000`:
-
-
 
 ```
 
@@ -32,8 +29,6 @@ npm start
 ```
 
 DATABASE DESIGN:
-
-**SIMPLE OVERVIEW:**
 
 1. User can have 2 or more accounts, so the hierarchy goes like this:
 
@@ -67,5 +62,3 @@ DATABASE DESIGN:
        - This sub-collection contains savings account balance details.
 
 - Everything within the database is assigned unique IDs.
-
-This structured database design allows for the effective management of user data, transaction history, and financial account balances. You can use this information to understand the data organization within the BudgetWise Challenge application.
