@@ -8,6 +8,7 @@ const cors = require("cors");
 const accesKeyRoutes = require("./routes/getAccesKey.routes");
 const tokenExchangeRoutes = require("./routes/tokenExchange.routes");
 const createLinkRoutes = require("./routes/createLink.routes");
+const monthylBudgetRoutes = require("./routes/monthly.budget.routes");
 
 /////////////////////// PARSERS ////////////////////////////
 app.use(cors());
@@ -24,6 +25,7 @@ app.get("/", async (req, res) => {
 app.use("/create-link-token", createLinkRoutes);
 app.use("/token-exchange", tokenExchangeRoutes);
 app.use("/getAccessKey", accesKeyRoutes);
+app.use("/user-account-balances", monthylBudgetRoutes);
 
 const PORT = process.env.PORT || 4000;
 

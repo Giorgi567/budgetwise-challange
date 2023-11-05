@@ -1,5 +1,5 @@
+const Transactions = require("../modules/transactions.module");
 const { admin } = require("./firestore.initilizer");
-
 const saveTransactions = async (
   userAccountRef,
   authResponse,
@@ -11,10 +11,9 @@ const saveTransactions = async (
   );
 
   userTransactions.forEach((transaction) => {
-    const transactionRef = userAccountRef.collection("TransactionHistory");
-    transactionRef.add({
+    Transactions.add({
       timestamp: admin.firestore.FieldValue.serverTimestamp(),
-      data: transaction,
+      transaction,
     });
   });
 };
