@@ -23,11 +23,8 @@ It's recommended to use your own Plaid credentials. The provided credentials may
 
 ```
 
-npm start
 
-```
 
-```
 
 DATABASE DESIGN:
 
