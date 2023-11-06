@@ -17,7 +17,8 @@ const accesKeyRoutes = require("./routes/getAccesKey.routes");
 const tokenExchangeRoutes = require("./routes/tokenExchange.routes");
 const createLinkRoutes = require("./routes/createLink.routes");
 const monthylBudgetRoutes = require("./routes/monthly.budget.routes");
-
+const monthlyTransactionRoutes = require("./routes/getMonthlyTransaction.routes");
+const getAccountBalancesRoutes = require("./routes/Account.Balances.routes");
 /////////////////////// REQUEST HANDLERS ///////////////////
 
 //directes you to palid's client-side.
@@ -30,7 +31,8 @@ app.use("/create-link-token", createLinkRoutes);
 app.use("/token-exchange", tokenExchangeRoutes);
 app.use("/getAccessKey", accesKeyRoutes);
 app.use("/usersMonthlyBudget", monthylBudgetRoutes);
-
+app.use("/getUsersTransactions", monthlyTransactionRoutes);
+app.use("/getAccountBalances", getAccountBalancesRoutes);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 4000;
