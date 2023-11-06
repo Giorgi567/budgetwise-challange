@@ -48,7 +48,7 @@ exports.calcMonthlyBudget = async (req, res, next) => {
       0
     );
 
-    ////////////////Code Below Gets Savings Balance ///////////////////////////
+    //////////////// Code Below Gets Savings and Checkings Balance ///////////////////////////
     const savings = [];
     const savingsQuery = User.doc(userId).collection("SavingAccount");
     const savingsSnapshot = await savingsQuery.get();
