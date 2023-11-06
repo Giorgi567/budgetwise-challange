@@ -24,13 +24,75 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "{{URL}}/usersMonthlyBudget/kN3dEogAPZhxpeNJLbqdt5J7Wpe5KEILn9zGb",
+					"raw": "{{URL}}/usersMonthlyBudget/",
 					"host": [
 						"{{URL}}"
 					],
 					"path": [
 						"usersMonthlyBudget",
-						"kN3dEogAPZhxpeNJLbqdt5J7Wpe5KEILn9zGb"
+						""
+					]
+				},
+				"description": "The `/accounts/balance/get` endpoint returns the real-time balance for each of an `Item`’s accounts. It can be used for existing `Item`s that were added via any of Plaid’s other products."
+			},
+			"response": []
+		},
+		{
+			"name": "Get Users Accoutns Balance",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{URL}}/getAccountBalances/",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"getAccountBalances",
+						""
+					]
+				},
+				"description": "The `/accounts/balance/get` endpoint returns the real-time balance for each of an `Item`’s accounts. It can be used for existing `Item`s that were added via any of Plaid’s other products."
+			},
+			"response": []
+		},
+		{
+			"name": "Get Users Transactions",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{URL}}/getUsersTransactions/",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"getUsersTransactions",
+						""
 					]
 				},
 				"description": "The `/accounts/balance/get` endpoint returns the real-time balance for each of an `Item`’s accounts. It can be used for existing `Item`s that were added via any of Plaid’s other products."
@@ -72,13 +134,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{URL}}/getAccessKey/kN3dEogAPZhxpeNJLbqdt5J7Wpe5KEILn9zGb",
+					"raw": "{{URL}}/getAccessKey/",
 					"host": [
 						"{{URL}}"
 					],
 					"path": [
 						"getAccessKey",
-						"kN3dEogAPZhxpeNJLbqdt5J7Wpe5KEILn9zGb"
+						""
 					]
 				}
 			},
